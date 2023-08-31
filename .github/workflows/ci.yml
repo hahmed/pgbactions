@@ -103,7 +103,7 @@ jobs:
 
     - name: Install bundler dependencies
       run: bundle config unset deployment && bundle install --jobs 4 --retry 3
-      timeout-minutes: 3
+      timeout-minutes: 1
 
     - name: Set up database
       run: |
@@ -111,6 +111,7 @@ jobs:
         bundle exec rake db:migrate
 
   actioncable:
+    if: ${{ always() }}
     needs: build
     runs-on: ubuntu-latest
     strategy:
@@ -131,11 +132,11 @@ jobs:
             experimental: true
     steps:
       - name: Action cable Test
-        if: ${{ job.status == 'success' }}
         run: |
           echo "Action cable"
 
   actionview:
+    if: ${{ always() }}
     needs: build
     runs-on: ubuntu-latest
     strategy:
