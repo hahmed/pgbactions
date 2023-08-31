@@ -108,7 +108,7 @@ GEM
       racc (~> 1.4)
     psych (5.1.0)
       stringio
-    puma (5.6.7)
+    puma (6.3.1)
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.8)
@@ -147,6 +147,7 @@ GEM
       psych (>= 4.0.0)
     reline (0.3.8)
       io-console (~> 0.5)
+    spring (4.1.1)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -170,14 +171,12 @@ PLATFORMS
 
 DEPENDENCIES
   debug
-  puma (~> 5.0)
+  puma (~> 6.0)
   rails (~> 7.0.7, >= 7.0.7.2)
+  spring
   sprockets-rails
   sqlite3 (~> 1.4)
   tzinfo-data
-
-RUBY VERSION
-   ruby 3.2.2p53
 
 BUNDLED WITH
    2.4.14
