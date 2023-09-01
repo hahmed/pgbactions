@@ -113,7 +113,6 @@ jobs:
   actioncable:
     if: ${{ always() }}
     needs: build
-    continue-on-error: ${{ matrix.experimental }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -133,6 +132,7 @@ jobs:
             experimental: true
     steps:
       - name: Action cable Test
+        continue-on-error: ${{ needs.build.result == 'success'}}
         if: needs.build.result == 'success'
         run: echo "Action cable"
 
@@ -159,5 +159,6 @@ jobs:
             experimental: true
     steps:
       - name: ActionView Test
+        continue-on-error: ${{ needs.build.result == 'success'}}
         if: needs.build.result == 'success'
         run: echo "Action view"
