@@ -64,11 +64,6 @@ jobs:
     - name: Set up Redis
       uses: supercharge/redis-github-action@1.2.0
 
-    - name: Set up Chrome with Docker
-      run: |
-        docker pull selenium/standalone-chrome:latest
-        docker run -d -p 4444:4444 selenium/standalone-chrome
-
     # For activejob integration tests
     - name: Start Beanstalkd container
       uses: docker://schickling/beanstalkd
