@@ -132,8 +132,8 @@ jobs:
             experimental: true
     steps:
       - name: Action cable Test
-        run: |
-          echo "Action cable"
+        if: ${{ job.status == 'success' }}
+        run: echo "Action cable"
 
   actionview:
     if: ${{ always() }}
@@ -157,6 +157,5 @@ jobs:
             experimental: true
     steps:
       - name: ActionView Test
-        if: ${{ job.status == 'success' }}
-        run: |
-          echo "Action view"
+        if: job.status == 'success' && (matrix.experimental == 'false' || fromJSON(needs.build.outputs.matrix.${{ matrix.ruby }}).status == 'success')
+        run: echo "Action view"
