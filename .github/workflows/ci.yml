@@ -19,6 +19,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [2.7, 3.0]
     services:
       mysql:
         image: mysql:latest
@@ -40,7 +43,8 @@ jobs:
           --health-retries 3
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: Set up Memcached
       uses: niden/actions-memcached@v7
@@ -93,49 +97,49 @@ jobs:
     if: ${{ always() }}
     needs: build
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        experimental: [false]
-        ruby: ["2.7", "3.0", "3.1", "3.2"]
-        include:
-          - ruby: head
-            experimental: true
-          - ruby: jruby
-            experimental: true
-          - ruby: jruby-head
-            experimental: true
-          - ruby: truffleruby
-            experimental: true
-          - ruby: truffleruby-head
-            experimental: true
+    # strategy:
+    #   fail-fast: false
+    #   matrix:
+    #     experimental: [false]
+    #     ruby: ["2.7", "3.0", "3.1", "3.2"]
+    #     include:
+    #       - ruby: head
+    #         experimental: true
+    #       - ruby: jruby
+    #         experimental: true
+    #       - ruby: jruby-head
+    #         experimental: true
+    #       - ruby: truffleruby
+    #         experimental: true
+    #       - ruby: truffleruby-head
+    #         experimental: true
     steps:
       - name: Action cable Test
-        continue-on-error: ${{ matrix.ruby.experimental == true }}
-        if: needs.build.result == 'success'
+        # continue-on-error: ${{ matrix.ruby.experimental == true }}
+        # if: needs.build.result == 'success'
         run: echo "Action cable"
 
   actionview:
     if: ${{ always() }}
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        experimental: [false]
-        ruby: ["2.7", "3.0", "3.1", "3.2"]
-        include:
-          - ruby: head
-            experimental: true
-          - ruby: jruby
-            experimental: true
-          - ruby: jruby-head
-            experimental: true
-          - ruby: truffleruby
-            experimental: true
-          - ruby: truffleruby-head
-            experimental: true
+    # strategy:
+    #   fail-fast: false
+    #   matrix:
+    #     experimental: [false]
+    #     ruby: ["2.7", "3.0", "3.1", "3.2"]
+    #     include:
+    #       - ruby: head
+    #         experimental: true
+    #       - ruby: jruby
+    #         experimental: true
+    #       - ruby: jruby-head
+    #         experimental: true
+    #       - ruby: truffleruby
+    #         experimental: true
+    #       - ruby: truffleruby-head
+    #         experimental: true
     needs: build
     steps:
       - name: ActionView Test
-        if: ${{ job.status == 'success' && (matrix.experimental == 'false' || fromJSON(needs.build.outputs.matrix[matrix.job.ruby]).status != 'failure') }}
+        # if: ${{ job.status == 'success' && (matrix.experimental == 'false' || fromJSON(needs.build.outputs.matrix[matrix.job.ruby]).status != 'failure') }}
         run: echo "Action view"
