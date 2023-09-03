@@ -1,0 +1,95 @@
+name: 'My Composite Action'
+description: 'This is a composite action with a matrix of Ruby versions.'
+
+env:
+  CI: true
+  BUILDKITE: true
+  RAILS_ENV: test
+  RACK_ENV: test
+  MYSQL_HOST: 127.0.0.1
+  MYSQL_PORT: 3306
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  PGHOST: 127.0.0.1
+  PGUSER: postgres
+  PGPORT: 5432
+  BUNDLE_DEPLOYMENT: false
+
+runs:
+  using: 'composite'
+  services:
+    mysql:
+      image: mysql:latest
+      env:
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      ports:
+        - 3306:3306
+      options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    postgres:
+      image: postgres:alpine
+      env:
+        POSTGRES_HOST_AUTH_METHOD: trust
+      ports:
+        - 5432:5432
+      options: >-
+        --health-cmd pg_isready
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 3
+
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Memcached
+      uses: niden/actions-memcached@v7
+
+    - name: Set up Redis
+      uses: supercharge/redis-github-action@1.2.0
+
+    # For activejob integration tests
+    - name: Start Beanstalkd container
+      uses: docker://schickling/beanstalkd
+      with:
+        args: -p 11300:11300
+      continue-on-error: true
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: false
+      env:
+        BUNDLE_DEPLOYMENT: false
+
+    - name: Update RubyGems and Bundler
+      run: |
+        gem update --system
+        gem install bundler
+        ruby --version
+        gem --version
+        bundle --version
+
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.bundle
+        key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-ruby-${{ matrix.ruby }}-
+          ${{ runner.os }}-ruby-
+
+    - name: Install bundler dependencies
+      run: bundle config unset deployment && bundle install --jobs 4 --retry 3
+      timeout-minutes: 1
+
+    - name: Set up database
+      run: |
+        bundle exec rake db:create
+        bundle exec rake db:migrate
+
+
+
+# Define the matrix
+runs-matrix:
+  ruby: [2.7, 3.0]
