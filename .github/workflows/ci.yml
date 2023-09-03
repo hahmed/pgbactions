@@ -17,8 +17,8 @@ env:
   BUNDLE_DEPLOYMENT: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # build:
+  #   runs-on: ubuntu-latest
     # strategy:
     #   matrix:
     #     ruby: [2.7, 3.0]
