@@ -139,7 +139,6 @@ jobs:
     #         experimental: true
     #       - ruby: truffleruby-head
     #         experimental: true
-    needs: build
     steps:
       - name: Build
         uses: ./.github/workflows/build
