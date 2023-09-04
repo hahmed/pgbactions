@@ -44,7 +44,7 @@ jobs:
 
     # steps:
     # - name: Checkout code
-    #   uses: actions/checkout@v3
+    #   uses: actions/checkout@v2
 
     # - name: Set up Memcached
     #   uses: niden/actions-memcached@v7
@@ -114,7 +114,7 @@ jobs:
             experimental: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: Build
         uses: ./.github/workflows/build
         with:
@@ -145,7 +145,7 @@ jobs:
             experimental: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: Build
         uses: ./.github/workflows/build
         with:
