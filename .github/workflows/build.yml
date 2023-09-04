@@ -1,5 +1,4 @@
-name: 'My Composite Action'
-description: 'This is a composite action with a matrix of Ruby versions.'
+name: 'Build image and setup all dependencies'
 
 env:
   CI: true
@@ -15,81 +14,85 @@ env:
   PGPORT: 5432
   BUNDLE_DEPLOYMENT: false
 
-runs:
-  using: 'composite'
-  services:
-    mysql:
-      image: mysql:latest
-      env:
-        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      ports:
-        - 3306:3306
-      options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    postgres:
-      image: postgres:alpine
-      env:
-        POSTGRES_HOST_AUTH_METHOD: trust
-      ports:
-        - 5432:5432
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 3
+on:
+  workflow_call:
+    inputs:
+      ruby_version:
+        description: 'Ruby version'
+        required: true
+        default: '2.7'
+        type: string
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
 
-    - name: Set up Memcached
-      uses: niden/actions-memcached@v7
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Redis
-      uses: supercharge/redis-github-action@1.2.0
+      - name: Set up Memcached
+        uses: niden/actions-memcached@v7
 
-    # For activejob integration tests
-    - name: Start Beanstalkd container
-      uses: docker://schickling/beanstalkd
-      with:
-        args: -p 11300:11300
-      continue-on-error: true
+      - name: Set up Redis
+        uses: supercharge/redis-github-action@1.2.0
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: false
-      env:
-        BUNDLE_DEPLOYMENT: false
+      # For activejob integration tests
+      - name: Start Beanstalkd container
+        uses: docker://schickling/beanstalkd
+        with:
+          args: -p 11300:11300
+        continue-on-error: true
 
-    - name: Update RubyGems and Bundler
-      run: |
-        gem update --system
-        gem install bundler
-        ruby --version
-        gem --version
-        bundle --version
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ inputs.ruby_version }}
+          bundler-cache: false
+        env:
+          BUNDLE_DEPLOYMENT: false
 
-    - name: Cache dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.bundle
-        key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-ruby-${{ matrix.ruby }}-
-          ${{ runner.os }}-ruby-
+      - name: Update RubyGems and Bundler
+        run: |
+          gem update --system
+          gem install bundler
+          ruby --version
+          gem --version
+          bundle --version
 
-    - name: Install bundler dependencies
-      run: bundle config unset deployment && bundle install --jobs 4 --retry 3
-      timeout-minutes: 1
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.bundle
+          key: ${{ runner.os }}-ruby-${{ inputs.ruby_version }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-ruby-${{ inputs.ruby_version }}-
+            ${{ runner.os }}-ruby-
 
-    - name: Set up database
-      run: |
-        bundle exec rake db:create
-        bundle exec rake db:migrate
+      - name: Install bundler dependencies
+        run: bundle config unset deployment && bundle install --jobs 4 --retry 3
+        timeout-minutes: 1
 
-
-
-# Define the matrix
-runs-matrix:
-  ruby: [2.7, 3.0]
+      - name: Set up database
+        run: |
+          bundle exec rake db:create
+          bundle exec rake db:migrate
