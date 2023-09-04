@@ -1,5 +1,14 @@
 name: 'Build image and setup all dependencies'
 
+on:
+  workflow_call:
+    inputs:
+      ruby_version:
+        description: 'Ruby version'
+        required: true
+        default: '2.7'
+        type: string
+
 env:
   CI: true
   BUILDKITE: true
@@ -13,15 +22,6 @@ env:
   PGUSER: postgres
   PGPORT: 5432
   BUNDLE_DEPLOYMENT: false
-
-on:
-  workflow_call:
-    inputs:
-      ruby_version:
-        description: 'Ruby version'
-        required: true
-        default: '2.7'
-        type: string
 
 jobs:
   reusable_workflow_job:
@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Memcached
         uses: niden/actions-memcached@v7
