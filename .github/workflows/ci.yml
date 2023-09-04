@@ -17,82 +17,6 @@ env:
   BUNDLE_DEPLOYMENT: false
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     ruby: [2.7, 3.0]
-    # services:
-    #   mysql:
-    #     image: mysql:latest
-    #     env:
-    #       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    #     ports:
-    #       - 3306:3306
-    #     options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    #   postgres:
-    #     image: postgres:alpine
-    #     env:
-    #       POSTGRES_HOST_AUTH_METHOD: trust
-    #     ports:
-    #       - 5432:5432
-    #     options: >-
-    #       --health-cmd pg_isready
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 3
-
-    # steps:
-    # - name: Checkout code
-    #   uses: actions/checkout@v2
-
-    # - name: Set up Memcached
-    #   uses: niden/actions-memcached@v7
-
-    # - name: Set up Redis
-    #   uses: supercharge/redis-github-action@1.2.0
-
-    # # For activejob integration tests
-    # - name: Start Beanstalkd container
-    #   uses: docker://schickling/beanstalkd
-    #   with:
-    #     args: -p 11300:11300
-    #   continue-on-error: true
-
-    # - name: Set up Ruby
-    #   uses: ruby/setup-ruby@v1
-    #   with:
-    #     ruby-version: ${{ matrix.ruby }}
-    #     bundler-cache: false
-    #   env:
-    #     BUNDLE_DEPLOYMENT: false
-
-    # - name: Update RubyGems and Bundler
-    #   run: |
-    #     gem update --system
-    #     gem install bundler
-    #     ruby --version
-    #     gem --version
-    #     bundle --version
-
-    # - name: Cache dependencies
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ~/.bundle
-    #     key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-ruby-${{ matrix.ruby }}-
-    #       ${{ runner.os }}-ruby-
-
-    # - name: Install bundler dependencies
-    #   run: bundle config unset deployment && bundle install --jobs 4 --retry 3
-    #   timeout-minutes: 1
-
-    # - name: Set up database
-    #   run: |
-    #     bundle exec rake db:create
-    #     bundle exec rake db:migrate
-
   actioncable:
     runs-on: ubuntu-latest
 
@@ -114,18 +38,15 @@ jobs:
             experimental: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build
-        uses: ./.github/workflows/build
+        uses: build
         with:
           ruby: ${{ matrix.ruby }}
       - name: Action cable Test
-        # continue-on-error: ${{ matrix.ruby.experimental == true }}
-        # if: needs.build.result == 'success'
         run: echo "Action cable"
 
   actionview:
-    # if: ${{ always() }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -145,11 +66,10 @@ jobs:
             experimental: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build
-        uses: ./.github/workflows/build
+        uses: build
         with:
           ruby: ${{ matrix.ruby }}
       - name: ActionView Test
-        # if: ${{ job.status == 'success' && (matrix.experimental == 'false' || fromJSON(needs.build.outputs.matrix[matrix.job.ruby]).status != 'failure') }}
         run: echo "Action view"
