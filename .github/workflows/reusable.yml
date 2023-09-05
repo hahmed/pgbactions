@@ -1,0 +1,19 @@
+name: Reusable action
+
+on:
+  workflow_call:
+    inputs:
+      ruby_version:
+        description: 'Ruby version'
+        required: true
+        default: '2.7'
+        type: string
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run job 1
+        run: echo "${{ inputs.ruby_version }}"
+      - name: Run job 2
+        run: echo "Hello world"

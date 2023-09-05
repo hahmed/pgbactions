@@ -37,7 +37,6 @@ jobs:
           - ruby: truffleruby-head
             experimental: true
     steps:
-      - uses: actions/checkout@v3
       - name: Build
         uses: ./.github/workflows/build.yml
         with:
@@ -64,7 +63,6 @@ jobs:
           - ruby: truffleruby-head
             experimental: true
     steps:
-      - uses: actions/checkout@v3
       - name: Build
         uses: ./.github/workflows/build.yml
         with:
