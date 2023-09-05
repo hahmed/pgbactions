@@ -1,4 +1,4 @@
-name: Reusable action
+name: Reusable
 
 on:
   workflow_call:
