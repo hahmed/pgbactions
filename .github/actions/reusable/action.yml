@@ -11,9 +11,11 @@ on:
 
 jobs:
   reusable_workflow_job:
+    name: 'Reusable build action'
     runs-on: ubuntu-latest
+
     steps:
       - name: Run job 1
-        run: echo ${{ inputs.ruby_version }}
+        run: echo ${{ github.event.inputs.ruby_version }}
       - name: Run job 2
         run: echo "Hello world"

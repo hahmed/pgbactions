@@ -15,4 +15,4 @@ jobs:
       - name: Build
         uses: ./.github/actions/reusable
         with:
-          ruby_version: ${{ matrix.ruby }}
+          ruby_version: hello
