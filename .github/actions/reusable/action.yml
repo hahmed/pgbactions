@@ -3,7 +3,7 @@ name: Reusable
 on:
   workflow_call:
     inputs:
-      ruby_version:
+      ruby:
         description: 'Ruby version'
         required: true
         default: '2.7'
