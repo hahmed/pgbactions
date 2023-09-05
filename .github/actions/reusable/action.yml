@@ -1,13 +1,6 @@
 name: Reusable
 
 on:
-  workflow_dispatch:
-    inputs:
-      ruby_version:
-        description: 'Ruby version'
-        required: true
-        default: '2.7'
-        type: string
   workflow_call:
     inputs:
       ruby_version:
@@ -23,6 +16,6 @@ jobs:
 
     steps:
       - name: Run job 1
-        run: echo ${{ inputs.ruby_version }}
+        run: echo something
       - name: Run job 2
         run: echo "Hello world"
