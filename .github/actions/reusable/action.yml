@@ -1,6 +1,13 @@
 name: Reusable
 
 on:
+  workflow_dispatch:
+    inputs:
+      ruby_version:
+        description: 'Ruby version'
+        required: true
+        default: '2.7'
+        type: string
   workflow_call:
     inputs:
       ruby_version:
