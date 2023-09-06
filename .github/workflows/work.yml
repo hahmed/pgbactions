@@ -11,6 +11,7 @@ on:
 
 jobs:
   reusable_workflow_job:
+    name: Build and test rails
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
