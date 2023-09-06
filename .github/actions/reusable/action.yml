@@ -19,3 +19,6 @@ jobs:
         run: echo something
       - name: Run job 2
         run: echo "Hello world"
+      - name: sleep
+        run: sleep 10s
+        shell: bash
