@@ -8,6 +8,11 @@ on:
         required: false
         default: '2.7'
         type: string
+      experimental:
+        description: 'Experimental'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   reusable_workflow_job:
@@ -27,14 +32,14 @@ jobs:
         run: echo "Hello ${{ inputs.ruby }}"
       - name: Run job 2
         run: echo "Hello ${{ inputs.ruby }}"
-      # - name: Run job 3
-      #   run: |
-      #     if [ "${{ matrix.experimental }}" = "true" ]; then
-      #       echo ":cry:"
-      #       exit 1
-      #     else
-      #       echo "Hello ${{ matrix.ruby }}"
-      #     fi
+      - name: Run job 3
+        run: |
+          if [ "${{ inputs.experimental }}" = "true" ]; then
+            echo ":cry:"
+            exit 1
+          else
+            echo "Hello ${{ inputs.ruby }}"
+          fi
       - name: sleep
         run: sleep 10s
         shell: bash
