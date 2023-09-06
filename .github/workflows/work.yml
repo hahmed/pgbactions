@@ -17,3 +17,11 @@ jobs:
     steps:
       - name: Run job 1
         run: echo "Hello ${{ inputs.ruby }}"
+      - name: Run job 2
+        run: echo "Hello ${{ inputs.ruby }}"
+      - name: Run job 3
+        run: echo "Hello ${{ inputs.ruby }}"
+      - name: sleep
+        run: sleep 10s
+        shell: bash
+
