@@ -3,7 +3,23 @@ name: Test reusable action
 on: [push, pull_request]
 
 jobs:
-  build:
+  actioncable:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["2.7", "3.0", "3.1", "3.2"]
+    uses: ./.github/workflows/work.yml
+    with:
+      ruby: ${{ matrix.ruby }}
+  guides:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["2.7", "3.0", "3.1", "3.2"]
+    uses: ./.github/workflows/work.yml
+    with:
+      ruby: ${{ matrix.ruby }}
+  actionview:
     strategy:
       fail-fast: false
       matrix:
