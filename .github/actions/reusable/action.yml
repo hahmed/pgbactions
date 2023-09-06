@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Run job 1
-        run: echo something
+        run: echo ${{ inputs.ruby }}
       - name: Run job 2
         run: echo "Hello world"
       - name: sleep
