@@ -1,4 +1,4 @@
-name: Reusable
+name: Build
 
 on:
   workflow_call:
@@ -11,7 +11,6 @@ on:
 
 jobs:
   reusable_workflow_job:
-    name: 'Reusable build action'
     runs-on: ubuntu-latest
 
     steps:
