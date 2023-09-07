@@ -1,13 +1,18 @@
-name: 'Build image and setup all dependencies'
+name: Build image and setup all dependencies
 
 on:
   workflow_call:
     inputs:
-      ruby_version:
+      ruby:
         description: 'Ruby version'
         required: true
         default: '2.7'
         type: string
+      experimental:
+        description: 'Experimental'
+        required: false
+        default: false
+        type: boolean
 
 env:
   CI: true
@@ -25,6 +30,7 @@ env:
 
 jobs:
   reusable_workflow_job:
+    name: Build and test rails
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -66,7 +72,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ inputs.ruby_version }}
+          ruby-version: ${{ inputs.ruby }}
           bundler-cache: false
         env:
           BUNDLE_DEPLOYMENT: false
@@ -83,9 +89,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.bundle
-          key: ${{ runner.os }}-ruby-${{ inputs.ruby_version }}-${{ hashFiles('**/Gemfile.lock') }}
+          key: ${{ runner.os }}-ruby-${{ inputs.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-ruby-${{ inputs.ruby_version }}-
+            ${{ runner.os }}-ruby-${{ inputs.ruby }}-
             ${{ runner.os }}-ruby-
 
       - name: Install bundler dependencies
