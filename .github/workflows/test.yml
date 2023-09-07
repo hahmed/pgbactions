@@ -1,4 +1,4 @@
-name: Test reusable action
+name: Rails tests
 
 on: [push, pull_request]
 
@@ -12,7 +12,7 @@ jobs:
         include:
           - ruby: head
             experimental: true
-    uses: ./.github/workflows/work.yml
+    uses: ./.github/workflows/build.yml
     with:
       ruby: ${{ matrix.ruby }}
       experimental: ${{ matrix.experimental }}
@@ -25,7 +25,7 @@ jobs:
         include:
         - ruby: head
           experimental: true
-    uses: ./.github/workflows/work.yml
+    uses: ./.github/workflows/build.yml
     with:
       ruby: ${{ matrix.ruby }}
       experimental: ${{ matrix.experimental }}
@@ -38,7 +38,7 @@ jobs:
         include:
         - ruby: head
           experimental: true
-    uses: ./.github/workflows/work.yml
+    uses: ./.github/workflows/build.yml
     with:
       ruby: ${{ matrix.ruby }}
       experimental: ${{ matrix.experimental }}
