@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    name: Rails tests on Ruby ${{ matrix.ruby }}
+    name: Ruby ${{ matrix.ruby }}
     strategy:
       fail-fast: false
       matrix:
