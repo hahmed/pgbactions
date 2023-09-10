@@ -32,6 +32,7 @@ jobs:
   reusable_workflow_job:
     name: Setup
     runs-on: ubuntu-latest
+    continue-on-error: ${{ inputs.experimental }}
     services:
       mysql:
         image: mysql:latest
@@ -104,7 +105,7 @@ jobs:
           bundle exec rake db:migrate
 
   action_view:
-    name: Action view tests [${{ inputs.ruby }}]
+    name: Action view tests
     runs-on: ubuntu-latest
     needs: reusable_workflow_job
     steps:
@@ -113,7 +114,7 @@ jobs:
       - name: sleep
         run: sleep 10
   action_pack:
-    name: Action pack tests [${{ inputs.ruby }}]
+    name: Action pack tests
     runs-on: ubuntu-latest
     needs: reusable_workflow_job
     steps:
@@ -122,7 +123,7 @@ jobs:
       - name: sleep
         run: sleep 15
   action_cable:
-    name: Action cable tests [${{ inputs.ruby }}]
+    name: Action cable tests
     runs-on: ubuntu-latest
     needs: reusable_workflow_job
     steps:
