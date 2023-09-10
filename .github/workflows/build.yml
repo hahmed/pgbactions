@@ -33,9 +33,6 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     continue-on-error: ${{ inputs.experimental }}
-    strategy:
-      matrix:
-        framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
     services:
       mysql:
         image: mysql:latest
@@ -107,11 +104,6 @@ jobs:
           bundle exec rake db:create
           bundle exec rake db:migrate
 
-      - name: ${{ matrix.framework }}
-        run: |
-          echo "Running ${{ matrix.framework }} tests"
-          sleep 10
-          bundle exec rake test
   # run_tests:
   #   name: Run tests
   #   needs: reusable_workflow_job
