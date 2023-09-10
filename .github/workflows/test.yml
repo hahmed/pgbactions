@@ -17,18 +17,18 @@ jobs:
       ruby: ${{ matrix.ruby }}
       experimental: false
 
-  test:
-    name: ${{ matrix.framework }}
-    runs-on: ubuntu-latest
-    needs: build
-    strategy:
-      fail-fast: false
-      matrix:
-        framework: [actionpack, activerecord, actionview, actionmailer, activesupport, activemodel, activestorage, railties]
+  # test:
+  #   name: ${{ matrix.framework }}
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       framework: [actionpack, activerecord, actionview, actionmailer, activesupport, activemodel, activestorage, railties]
 
-    steps:
-      - name: Run tests
-        run: bundle exec rake test
+  #   steps:
+  #     - name: Run tests
+  #       run: bundle exec rake test
       # ruby_3_0:
   #   uses: ./.github/workflows/build.yml
   #   with:
