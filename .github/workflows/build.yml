@@ -30,7 +30,7 @@ env:
 
 jobs:
   reusable_workflow_job:
-    name: Build and test rails
+    name: Setup
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -104,23 +104,29 @@ jobs:
           bundle exec rake db:migrate
 
   action_view:
-    name: Run tests
+    name: Action view tests [${{ inputs.ruby }}]
     runs-on: ubuntu-latest
     needs: reusable_workflow_job
     steps:
       - name: Action view tests
         run: echo "Action view tests"
+      - name: sleep
+        run: sleep 10
   action_pack:
-    name: Run tests
+    name: Action pack tests [${{ inputs.ruby }}]
     runs-on: ubuntu-latest
     needs: reusable_workflow_job
     steps:
       - name: Action pack tests
         run: echo "Action pack tests"
+      - name: sleep
+        run: sleep 15
   action_cable:
-    name: Run tests
+    name: Action cable tests [${{ inputs.ruby }}]
     runs-on: ubuntu-latest
     needs: reusable_workflow_job
     steps:
       - name: Action cable tests
         run: echo "Action cable tests"
+      - name: sleep
+        run: sleep 30
