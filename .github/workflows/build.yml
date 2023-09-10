@@ -104,30 +104,34 @@ jobs:
           bundle exec rake db:create
           bundle exec rake db:migrate
 
-  action_view:
-    name: Action view tests
+  run_tests:
+    name: Run tests
     runs-on: ubuntu-latest
     needs: reusable_workflow_job
+    strategy:
+      matrix:
+        framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
     steps:
-      - name: Action view tests
-        run: echo "Action view tests"
-      - name: sleep
-        run: sleep 10
-  action_pack:
-    name: Action pack tests
-    runs-on: ubuntu-latest
-    needs: reusable_workflow_job
-    steps:
-      - name: Action pack tests
-        run: echo "Action pack tests"
-      - name: sleep
-        run: sleep 15
-  action_cable:
-    name: Action cable tests
-    runs-on: ubuntu-latest
-    needs: reusable_workflow_job
-    steps:
-      - name: Action cable tests
-        run: echo "Action cable tests"
-      - name: sleep
-        run: sleep 30
+      - name: ${{ matrix.framework }}
+        run: |
+          echo "Running ${{ matrix.framework }} tests"
+          sleep 10
+          bundle exec rake test
+  # action_pack:
+  #   name: Action pack tests
+  #   runs-on: ubuntu-latest
+  #   needs: reusable_workflow_job
+  #   steps:
+  #     - name: Action pack tests
+  #       run: echo "Action pack tests"
+  #     - name: sleep
+  #       run: sleep 15
+  # action_cable:
+  #   name: Action cable tests
+  #   runs-on: ubuntu-latest
+  #   needs: reusable_workflow_job
+  #   steps:
+  #     - name: Action cable tests
+  #       run: echo "Action cable tests"
+  #     - name: sleep
+  #       run: sleep 30
