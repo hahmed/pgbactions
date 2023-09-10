@@ -31,7 +31,9 @@ env:
 jobs:
   reusable_workflow_job:
     name: Setup
-    runs-on: ubuntu-latest
+    runs-on:
+      group: build
+      labels: ubuntu-latest
     continue-on-error: ${{ inputs.experimental }}
     services:
       mysql:
@@ -107,7 +109,8 @@ jobs:
   run_tests:
     name: Run tests
     needs: reusable_workflow_job
-    runs-on: ${{ needs.reusable_workflow_job.runner.id }}
+    runs-on:
+      group: build
     strategy:
       matrix:
         framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
