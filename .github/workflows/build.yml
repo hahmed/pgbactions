@@ -107,7 +107,7 @@ jobs:
   run_tests:
     name: Run tests
     needs: reusable_workflow_job
-    runs-on: ${{ needs.reusable_workflow_job.runner.id }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
