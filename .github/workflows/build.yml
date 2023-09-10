@@ -33,6 +33,9 @@ jobs:
     name: Setup
     runs-on: ubuntu-latest
     continue-on-error: ${{ inputs.experimental }}
+    strategy:
+      matrix:
+        framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
     services:
       mysql:
         image: mysql:latest
@@ -104,19 +107,24 @@ jobs:
           bundle exec rake db:create
           bundle exec rake db:migrate
 
-  run_tests:
-    name: Run tests
-    runs-on: ${{ needs.reusable_workflow_job.runner.os }}
-    needs: reusable_workflow_job
-    strategy:
-      matrix:
-        framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
-    steps:
       - name: ${{ matrix.framework }}
         run: |
           echo "Running ${{ matrix.framework }} tests"
           sleep 10
           bundle exec rake test
+  # run_tests:
+  #   name: Run tests
+  #   needs: reusable_workflow_job
+  #   runs-on: ${{ needs.reusable_workflow_job.runner.os }}
+  #   strategy:
+  #     matrix:
+  #       framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
+  #   steps:
+  #     - name: ${{ matrix.framework }}
+  #       run: |
+  #         echo "Running ${{ matrix.framework }} tests"
+  #         sleep 10
+  #         bundle exec rake test
   # action_pack:
   #   name: Action pack tests
   #   runs-on: ubuntu-latest
