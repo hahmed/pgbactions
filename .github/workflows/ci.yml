@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  workflow_call:
+
+jobs:
+  actionview:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "actionview"
+  actionpack:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "actionpack"
+  railties:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "railties"

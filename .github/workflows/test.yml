@@ -3,26 +3,32 @@ name: Rails tests
 on: [push, pull_request]
 
 jobs:
-  ruby_2_7:
+  test:
+    strategy:
+      matrix:
+        experimental: [false]
+        ruby: [2.7, 3.0, 3.1, 3.2]
+        include:
+          - { experimental: true, ruby: 'head' }
     uses: ./.github/workflows/build.yml
     with:
-      ruby: 2.7
+      ruby: ${{ matrix.ruby }}
       experimental: false
-  ruby_3_0:
-    uses: ./.github/workflows/build.yml
-    with:
-      ruby: 3.0
-      experimental: false
-  ruby_3_1:
-    uses: ./.github/workflows/build.yml
-    with:
-      ruby: 3.1
-      experimental: false
-  ruby_3_2:
-    uses: ./.github/workflows/build.yml
-    with:
-      ruby: 3.2
-      experimental: false
+  # ruby_3_0:
+  #   uses: ./.github/workflows/build.yml
+  #   with:
+  #     ruby: 3.0
+  #     experimental: false
+  # ruby_3_1:
+  #   uses: ./.github/workflows/build.yml
+  #   with:
+  #     ruby: 3.1
+  #     experimental: false
+  # ruby_3_2:
+  #   uses: ./.github/workflows/build.yml
+  #   with:
+  #     ruby: 3.2
+  #     experimental: false
   ruby_head:
     uses: ./.github/workflows/build.yml
     with:

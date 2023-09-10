@@ -102,3 +102,15 @@ jobs:
         run: |
           bundle exec rake db:create
           bundle exec rake db:migrate
+
+  run_tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    needs: reusable_workflow_job
+    steps:
+      - name: Action view tests
+        run: echo "Action view tests"
+      - name: Action pack tests
+        run: echo "Action pack tests"
+      - name: Action cable tests
+        run: echo "Action cable tests"
