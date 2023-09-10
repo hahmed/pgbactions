@@ -29,8 +29,8 @@ jobs:
   #   with:
   #     ruby: 3.2
   #     experimental: false
-  ruby_head:
-    uses: ./.github/workflows/build.yml
-    with:
-      ruby: head
-      experimental: true
+  # ruby_head:
+  #   uses: ./.github/workflows/build.yml
+  #   with:
+  #     ruby: head
+  #     experimental: true
