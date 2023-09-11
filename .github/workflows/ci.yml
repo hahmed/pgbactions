@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  tests:
+  reusable_workflow_job:
     runs-on: ubuntu-latest
     strategy:
       matrix:

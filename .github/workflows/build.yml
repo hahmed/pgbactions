@@ -91,21 +91,16 @@ jobs:
         with:
           path: ~/.bundle
           key: ${{ runner.os }}-ruby-${{ inputs.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-ruby-${{ inputs.ruby }}-
-            ${{ runner.os }}-ruby-
+          restore-keys: ${{ runner.os }}-ruby-${{ inputs.ruby }}-
 
       - name: Install bundler dependencies
-        run: bundle config unset deployment && bundle install --jobs 4 --retry 3
+        run: bundle config unset deployment && bundle config path ~/.bundle && bundle install --jobs 4 --retry 3
         timeout-minutes: 1
 
       - name: Set up database
         run: |
           bundle exec rake db:create
           bundle exec rake db:migrate
-
-      - name: Run tests for all frameworks
-        uses: ./.github/workflows/ci.yml
 
   # run_tests:
   #   name: Run tests
