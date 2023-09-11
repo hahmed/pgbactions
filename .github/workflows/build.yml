@@ -74,7 +74,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ inputs.ruby }}
-          bundler-cache: false
+          bundler-cache: true
         env:
           BUNDLE_DEPLOYMENT: false
 
@@ -86,15 +86,15 @@ jobs:
           gem --version
           bundle --version
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.bundle
-          key: ${{ runner.os }}-ruby-${{ inputs.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-ruby-${{ inputs.ruby }}-
+      # - name: Cache dependencies
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.bundle
+      #     key: ${{ runner.os }}-ruby-${{ inputs.ruby }}-${{ hashFiles('**/Gemfile.lock') }}
+      #     restore-keys: ${{ runner.os }}-ruby-${{ inputs.ruby }}-
 
       - name: Install bundler dependencies
-        run: bundle config unset deployment && bundle config path ~/.bundle && bundle install --jobs 4 --retry 3
+        run: bundle config unset deployment && bundle install --jobs 4 --retry 3
         timeout-minutes: 1
 
       - name: Set up database
