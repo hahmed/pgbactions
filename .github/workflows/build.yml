@@ -31,9 +31,7 @@ env:
 jobs:
   reusable_workflow_job:
     name: Setup
-    runs-on:
-      group: build
-      labels: ubuntu-latest
+    runs-on: ubuntu-latest
     continue-on-error: ${{ inputs.experimental }}
     services:
       mysql:
