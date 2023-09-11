@@ -35,7 +35,7 @@ env:
 
 jobs:
   reusable_workflow_job:
-    name: Setup
+    name: ${{ inputs.framework }}
     runs-on: ubuntu-latest
     continue-on-error: ${{ inputs.experimental }}
     services:
@@ -107,7 +107,7 @@ jobs:
           bundle exec rake db:create
           bundle exec rake db:migrate
 
-      - name: Run tests for ${{ inputs.framework }} on Ruby ${{ inputs.ruby }}
+      - name: Run tests
         run: bundle exec rake test
 
   # run_tests:

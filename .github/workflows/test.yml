@@ -11,9 +11,9 @@ jobs:
         experimental: [false]
         ruby: [2.7, 3.0, 3.1, 3.2]
         framework: [actionpack, activerecord, actionview, actionmailer, activesupport, activemodel, activestorage, railties]
-        # include:
-        #   - ruby: head
-        #     experimental: true
+        include:
+          - ruby: head
+            experimental: true
     uses: ./.github/workflows/build.yml
     with:
       ruby: ${{ matrix.ruby }}
