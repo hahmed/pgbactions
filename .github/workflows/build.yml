@@ -106,21 +106,24 @@ jobs:
           bundle exec rake db:create
           bundle exec rake db:migrate
 
-  run_tests:
-    name: Run tests
-    needs: reusable_workflow_job
-    runs-on:
-      group: build
-      labels: ubuntu-latest
-    strategy:
-      matrix:
-        framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
-    steps:
-      - name: ${{ matrix.framework }}
-        run: |
-          echo "Running ${{ matrix.framework }} tests"
-          sleep 10
-          bundle exec rake test
+      - name: Run tests for all frameworks
+        uses: ./.github/workflows/ci.yml
+
+  # run_tests:
+  #   name: Run tests
+  #   needs: reusable_workflow_job
+  #   runs-on:
+  #     group: build
+  #     labels: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
+  #   steps:
+  #     - name: ${{ matrix.framework }}
+  #       run: |
+  #         echo "Running ${{ matrix.framework }} tests"
+  #         sleep 10
+  #         bundle exec rake test
   # action_pack:
   #   name: Action pack tests
   #   runs-on: ubuntu-latest
