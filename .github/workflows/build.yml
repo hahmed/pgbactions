@@ -111,6 +111,7 @@ jobs:
     needs: reusable_workflow_job
     runs-on:
       group: build
+      labels: ubuntu-latest
     strategy:
       matrix:
         framework: [actioncable, actionmailbox, actionmailer, actionpack, actiontext, actionview, activejob, activemodel, activerecord, activestorage, activesupport]
